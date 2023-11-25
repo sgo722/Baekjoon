@@ -4,31 +4,22 @@ using namespace std;
 int n, r, c;
 int ans;
 
-bool in(int y, int x, int cnt){
-    if(r >= y - cnt+1 && r <= y && c >= x -cnt+1 && c <= x){
-        return true;
-    }
-    return false;
-}
 
-
-void go(int y, int x, int cnt){
-    if(!in(y, x, cnt)){
-        ans += (cnt * cnt);
+void go(int y, int x, int size){
+    if(y == r && x == c){
+        cout << ans << "\n";
         return;
     }
-    if(cnt == 1){
-        if(y == r && x == c){
-            cout << ans << "\n";
-            exit(0);
-        }
-        ans++;
-        return;
+
+    if(r >= y && r < y+size && c >= x && c < x+size){
+        go(y,x,size/2);
+        go(y,x+size/2, size/2);
+        go(y+size/2 ,x, size/2);
+        go(y+size/2, x+size/2, size/2);
     }
-    go(y-cnt/2,x-cnt/2,cnt/2);
-    go(y-cnt/2,x,cnt/2);
-    go(y,x-cnt/2,cnt/2);
-    go(y,x,cnt/2);
+    else{
+        ans += (size * size);
+    }
 
 }
 int main(){
@@ -36,8 +27,7 @@ int main(){
     cout.tie(NULL);
     cin.tie(NULL);
     cin >> n >> r >> c;
-//    cout << pow(2,3) << '\n';
 
-    go(pow(2,n)-1, pow(2,n)-1,pow(2,n));
+    go(0,0,pow(2,n));
     return 0;
 }
