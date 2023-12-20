@@ -1,66 +1,45 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define INF 2000000000
+#define MAX_N 100001
 
-// 풀었음.
-// 문제점
-// 1. dp배열의 크기 수정
-// 2. 발이 0에 있을 때 움직이는 로직 수정
-// 3. 같은 발에 위치할 때 로직 수정.
-// 개선하고싶은 부분
-// 1. 같은 위치에 발이 놓이는 경우를 막을 수 있으면 좋을 것 같음.
+// 정답 코드
+// check 함수를 통해서 움직임 값을 구현함.
+// 궁금한 점
+// 이 전에 내가 작성한 코드들과 시간복잡도가 많이 차이날까?
+// 내가 했던 것보다 조금은 많이 걸릴 것 같다고 생각한다.
+// 이전 코드에서는 발이 같은 위치에 놓일 경우 처리를 해주었지만, 이 경우는 처리되어있지 않기 때문이다.
+// 최적값을 나타내는 것은 동일하지만, 이런 과정에서 더 많이 걸린다고 생각한다.
 
-int a[100004];
-int dp[100004][5][5];
+int dp[5][5][MAX_N], n;
+vector<int> v;
 
-int go(int here, int r, int l){
-    if(r > 0 && l > 0 && r == l) return INF;
-    if(a[here] == 0) return 0;
+int check(int from, int to){
+    if(from == 0) return 2;
+    if(from == to) return 1;
+    if(abs(from-to) == 2) return 4;
+    return 3;
+}
 
-    int &ans = dp[here][r][l];
-    if(ans != 0) return ans;
-    ans = INF;
+int solve(int y, int x, int target){
+    if(target == n) return 0;
+    if(dp[y][x][target] != -1) return dp[y][x][target];
 
-    if(a[here] == r){
-        ans = min(ans, go(here+1,r,l)+1);
-    }
-    else if(a[here] != r){
-        if(r == 0){
-            ans = min(ans, go(here+1,a[here],l)+2);
-        }
-        else if((a[here] % 2) == (r % 2)){
-            ans = min(ans, go(here+1,a[here],l)+4);
-        }
-        else{
-            ans = min(ans, go(here+1,a[here],l)+3);
-        }
-    }
-    if(a[here] == l){
-        ans = min(ans, go(here+1,r,l)+1);
-    }
-    else if(a[here] != l){
-        if(l == 0){
-            ans = min(ans, go(here+1,r,a[here])+2);
-        }
-        else if((a[here] % 2) == (l % 2)){
-            ans = min(ans, go(here+1,r,a[here])+4);
-        }
-        else{
-            ans = min(ans, go(here+1,r,a[here])+3);
-        }
-    }
-
-    return ans;
+    int left = solve(v[target], x, target+1)+check(y,v[target]);
+    int right = solve(y,v[target],target+1)+check(x,v[target]);
+    return dp[y][x][target] = min(left,right);
 }
 int main(){
-
-    for(int i=0; ; i++){
-        cin >> a[i];
-        if(a[i] == 0) break;
+    while(1){
+        int num;
+        cin >> num;
+        if(num == 0){
+            break;
+        }
+        v.push_back(num);
     }
 
-    cout << go(0,0,0) << "\n";
-
-
+    memset(dp,-1,sizeof(dp));
+    n = v.size();
+    cout << solve(0,0,0) << "\n";
     return 0;
 }
