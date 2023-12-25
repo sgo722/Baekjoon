@@ -2,20 +2,14 @@
 using namespace std;
 
 
-int n,k, ret, a;
+int n,k;
 
-int factorial(int k){
-    if(k == 1) return 1;
-    return k* factorial(k-1);
+int factorial(int num){
+    if(num == 1 || num == 0) return 1;
+    return num * factorial(num-1);
 }
 int main(){
     cin >> n >> k;
-    ret = 1, a=1;
-    for(int i=n; i>n-k; i--){
-        ret *= i;
-        a *= (n-i+1);
-    }
-    ret /= a;
-    cout << ret << "\n";
+    cout << factorial(n) / (factorial(k) * factorial(n-k));
     return 0;
 }
