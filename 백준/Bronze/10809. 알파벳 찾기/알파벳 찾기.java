@@ -6,6 +6,7 @@ public class Main{
 	public static void main(String[] args) throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String str = br.readLine();
+		StringBuilder sb = new StringBuilder();
 		int[] arr = new int[30];
 		for(int i=0; i<26; i++) {
 			arr[i] = -1;
@@ -18,7 +19,8 @@ public class Main{
 		}
 		
 		for(int i=0; i<26; i++) {
-			System.out.print(arr[i] + " ");
+			sb.append(arr[i] + " ");
 		}
+		System.out.println(sb);
 	}
 }
