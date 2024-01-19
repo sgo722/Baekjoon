@@ -14,7 +14,6 @@ import java.util.StringTokenizer;
  * => 해보려고했으나 StringBuilder객체를 이용하면 출력이 이상하게 나옴.
  * StringBuilder를 이용한 구현 실패 - 08:43
  * sb를 이용한 풀이 답 참고했음.
- * 
  */
 
 public class Main{
@@ -28,17 +27,17 @@ public class Main{
 		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 		n = Integer.parseInt(st.nextToken());
 		m = Integer.parseInt(st.nextToken());
-		arr = new int[n+1];
+		arr = new int[m];
 		visited = new int[n+1];
-		combi(0,"",0);
+		combi(0);
 		System.out.println(sb);
 		
 	}
 	
-	public static void combi(int idx, String s, int cnt) {
-		if(cnt == m) {
-			for(int i=0; i<cnt; i++) {
-				sb.append(arr[i]).append(" ");
+	public static void combi(int depth) {
+		if(depth == m) {
+			for(int here : arr) {
+				sb.append(here).append(" ");
 			}
 			sb.append("\n");
 			return;
@@ -47,11 +46,10 @@ public class Main{
 		for(int i=1; i<=n; i++) {
 			if(visited[i] == 0) {
 				visited[i] = 1;
-				arr[cnt] = i;
-				combi(i,s+i+" ",cnt+1);
+				arr[depth] = i;
+				combi(depth+1);
 				visited[i] = 0;
 			}
 		}
 	}
 }
-
