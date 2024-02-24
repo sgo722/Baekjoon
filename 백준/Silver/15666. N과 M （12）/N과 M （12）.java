@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.util.*;
 
@@ -6,6 +5,8 @@ public class Main {
 
     static int[] temp, arr, ans, visited;
     static int n, m, size;
+
+    static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -33,28 +34,30 @@ public class Main {
 //        for(int i=0; i<size; i++){
 //            System.out.print(arr[i] + " ");
 //        }
-        go(0);
+        go(0, 0);
+
+        System.out.print(sb);
     }
 
-    static void go(int idx) {
+    static void go(int idx, int start) {
         if (idx == m) {
             for (int i = 0; i < m; i++) {
-                System.out.print(ans[i] + " ");
+                sb.append(ans[i] + " ");
             }
-            System.out.println();
+            sb.append("\n");
             return;
         }
 
         if (idx == 0) {
             for (int i = 0; i < size; i++) {
                 ans[idx] = arr[i];
-                go(idx + 1);
+                go(idx + 1, start);
             }
         } else {
-            for (int i = 0; i < size; i++) {
+            for (int i = start; i < size; i++) {
                 if (ans[idx - 1] <= arr[i]) {
                     ans[idx] = arr[i];
-                    go(idx + 1);
+                    go(idx + 1, i);
                 }
             }
         }
