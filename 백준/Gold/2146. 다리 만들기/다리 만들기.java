@@ -32,7 +32,8 @@ public class Main {
     static BufferedReader br;
     static StringTokenizer st;
     static int n;
-    static int[][] map, visited;
+    static int[][] map;
+    static boolean[][] visited;
     static ArrayList<Node> islands;
     static int ans = Integer.MAX_VALUE;
     public static void main(String[] args) throws IOException{
@@ -58,7 +59,7 @@ public class Main {
         Queue<Node> q = new LinkedList<>();
         visitedClear();
         q.add(new Node(r,c));
-        visited[r][c] = 1;
+        visited[r][c] = true;
 
         while(q.size()>0) {
             Node now = q.poll();
@@ -66,13 +67,14 @@ public class Main {
                 int nr = now.r + dr[i];
                 int nc = now.c + dc[i];
                 if(nr < 0 || nc < 0 || nr >= n || nc >= n) continue;
-                if(visited[nr][nc] == 1) continue;
+                if(visited[nr][nc]) continue;
                 if(map[nr][nc] == mapIdx) continue;
                 if(map[nr][nc] == 0) {
-                    visited[nr][nc] = 1;
+                    visited[nr][nc] = true;
                     q.add(new Node(nr,nc,now.len+1));
                 }else if(map[nr][nc] != 0 && now.len >= 1){
                     ans = Math.min(ans, now.len);
+                    return;
                 }
             }
         }
@@ -97,7 +99,7 @@ public class Main {
         visitedClear();
         map[r][c] = flag;
         q.add(new Node(r,c));
-        visited[r][c] = 1;
+        visited[r][c] = true;
 
         while(q.size()>0) {
             Node now = q.poll();
@@ -105,10 +107,10 @@ public class Main {
                 int nr = now.r + dr[i];
                 int nc = now.c + dc[i];
                 if(nr < 0 || nc < 0 || nr >= n || nc >= n) continue;
-                if(visited[nr][nc] == 1) continue;
+                if(visited[nr][nc]) continue;
                 if(map[nr][nc] == 1) {
                     map[nr][nc]= flag;
-                    visited[nr][nc] = 1;
+                    visited[nr][nc] = true;
                     q.add(new Node(nr,nc));
                 }
             }
@@ -120,7 +122,7 @@ public class Main {
         br = new BufferedReader(new InputStreamReader(System.in));
         n = Integer.parseInt(br.readLine());
         map = new int[n][n];
-        visited = new int[n][n];
+        visited = new boolean[n][n];
         islands = new ArrayList<>();
 
         for(int i=0; i<n; i++) {
@@ -135,7 +137,7 @@ public class Main {
 
         for(int r=0; r<n; r++){
             for(int c=0; c<n; c++){
-                visited[r][c] = 0;
+                visited[r][c] = false;
             }
         }
     }
