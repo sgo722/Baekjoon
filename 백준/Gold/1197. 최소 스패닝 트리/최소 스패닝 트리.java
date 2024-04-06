@@ -1,79 +1,83 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
-
+import java.io.*;
+import java.util.*;
 
 public class Main{
-
     static class Edge implements Comparable<Edge>{
-        int from;
-        int to;
-        int weight;
+        int s;
+        int e;
+        int value;
 
-        public Edge(int from, int to, int weight){
-            super();
-            this.from = from;
-            this.to = to;
-            this.weight = weight;
+        public Edge(int s, int e, int value){
+            this.s = s;
+            this.e = e;
+            this.value = value;
         }
 
         @Override
-        public int compareTo(Edge o) {
-            return Integer.compare(this.weight, o.weight);
+        public int compareTo(Edge o){
+            return this.value - o.value;
         }
     }
 
-    static int[] parents;
+    static int v,e, ans;
+    static int[] vertex;
 
+    static int[] root;
 
-    static PriorityQueue<Edge> pq;
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+    static PriorityQueue<Edge> edges;
+    public static void main(String[] args) throws Exception{
+        input();
+        solution();
+    }
 
-        int v = Integer.parseInt(st.nextToken());
-        int e = Integer.parseInt(st.nextToken());
-        pq = new PriorityQueue<>();
-
-        makeSet(v);
-        for(int i=0; i<e; i++){
-            st = new StringTokenizer(br.readLine(), " ");
-            int from = Integer.parseInt(st.nextToken());
-            int to = Integer.parseInt(st.nextToken());
-            int weight = Integer.parseInt(st.nextToken());
-
-            pq.add(new Edge(from, to ,weight));
-        }
-
-        // 최소 스패닝 트리의 가중치를 구하라?
-        long ans = 0;
-        while(!pq.isEmpty()){
-            Edge poll = pq.poll();
-            if(union(poll.from, poll.to)){
-                ans += poll.weight;
+    static void solution(){
+        init();
+        while(edges.size() > 0){
+            Edge now = edges.poll();
+            int s = now.s;
+            int e = now.e;
+            int value = now.value;
+            if(union(s,e)) {
+                ans += value;
             }
         }
 
         System.out.println(ans);
+
     }
 
-    static void makeSet(int size){
-        parents = new int[size+1];
-        for(int i=1; i<=size; i++){
-            parents[i] = i;
+    static void init(){
+        for(int i=0; i<=v; i++) {
+            root[i] = i;
         }
     }
 
-    static int find(int x){
-        if(parents[x] == x) return x;
-        return parents[x] = find(parents[x]);
+    static int find(int idx){
+        if(root[idx] == idx) return idx;
+        return root[idx] = find(root[idx]);
     }
 
-    static boolean union(int from, int to){
-        if(find(from) == find(to)) return false;
-        parents[find(from)] = find(to);
+    static boolean union(int a, int b){
+        if(find(a) == find(b)) return false;
+        root[find(a)] = find(b);
         return true;
+    }
+
+    static void input() throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st=  new StringTokenizer(br.readLine(), " ");
+        edges = new PriorityQueue<>();
+        v = Integer.parseInt(st.nextToken());
+        e = Integer.parseInt(st.nextToken());
+        vertex = new int[v+1];
+        root = new int[v+1];
+
+        for(int i=0; i<e; i++) {
+            st = new StringTokenizer(br.readLine(), " ");
+            int s = Integer.parseInt(st.nextToken());
+            int e = Integer.parseInt(st.nextToken());
+            int value = Integer.parseInt(st.nextToken());
+            edges.add(new Edge(s, e, value));
+        }
     }
 }
