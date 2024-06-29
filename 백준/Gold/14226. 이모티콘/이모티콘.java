@@ -58,13 +58,13 @@ public class Main{
             }
             t[save][number] = time;
 
-            if (save > 0 && save + number < n+1 && t[save][number+save] > time + 1) {
+            if (save > 0 && save + number < n+1) {
                 q.add(new Node(number + save, save, time + 1));
             }
-            if (number >= 1 && t[save][number-1] > time + 1) {
+            if (number >= 1) {
                 q.add(new Node(number - 1, save, time + 1));
             }
-            if (number > 0 && t[number][number] > time + 1) {
+            if (number > 0) {
                 q.add(new Node(number, number, time + 1));
             }
         }
