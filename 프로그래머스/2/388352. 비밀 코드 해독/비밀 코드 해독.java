@@ -27,7 +27,7 @@ class Solution {
         return true;
     }
     
-    static void dfs(int depth, int n, ArrayList<Integer> numbers){
+    static void dfs(int depth, int n, ArrayList<Integer> numbers, int lastNumber){
         if(depth == 5){
             if(check(numbers)){
                 answer++;
@@ -35,12 +35,12 @@ class Solution {
             return;
         }
         
-        for(int i=1; i<=n; i++){
+        for(int i=lastNumber + 1; i<=n; i++){
             if(visited[i]) continue;
             visited[i] = true;
             numbers.add(i);
             
-            dfs(depth + 1, n, numbers);
+            dfs(depth + 1, n, numbers, i);
             
             visited[i] = false;
             numbers.remove(numbers.size() - 1);
@@ -63,7 +63,7 @@ class Solution {
                 list.get(i).put(q[i][j], list.get(i).getOrDefault(q[i][j],0) + 1);
             }
         }
-        dfs(0, n, new ArrayList<>());
-        return answer/120;
+        dfs(0, n, new ArrayList<>(), 0);
+        return answer;
     }
 }
